@@ -1,0 +1,93 @@
+version: '2'
+
+services:
+  edge-router:
+    image: arijmansour/pfe_edge-router_microservice
+    ports:
+      - '80:80'
+    hostname: pfe_edge-router_microservice
+    restart: always
+    environment:
+      - reschedule:on-node-failure
+  catalogue:
+    image: arijmansour/pfe_catalogue_microservice
+    hostname: pfe_catalogue_microservice
+    restart: always
+    environment:
+      - reschedule:on-node-failure
+  catalogue-db:
+    image: arijmansour/pfe_catalogue-db_microservice
+    hostname: pfe_catalogue-db_microservice
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=""
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+      - MYSQL_DATABASE=socksdb
+  carts:
+    image: arijmansour/pfe_carts_microservices
+    hostname: pfe_carts_microservices
+    restart: always
+    environment:
+      - reschedule:on-node-failure
+  carts-db:
+    image: mongo
+    hostname: carts-db
+    restart: always
+    environment:
+      - reschedule:on-node-failure
+  orders:
+    image: arijmansour/pfe_orders_microservices
+    hostname: pfe_orders_microservices
+    restart: always
+    environment:
+      - reschedule:on-node-failure
+  orders-db:
+    image: mongo
+    hostname: orders-db
+    restart: always
+    environment:
+      - reschedule:on-node-failure
+  shipping:
+    image: arijmansour/pfe_shipping_microservices
+    hostname: pfe_shipping_microservices
+    restart: always
+    environment:
+      - reschedule:on-node-failure
+  queue-master:
+    image: arijmansour/pfe_queue_microservices
+    hostname: pfe_queue_microservices
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+    environment:
+      - reschedule:on-node-failure
+  rabbitmq:
+    image: rabbitmq:3
+    hostname: rabbitmq
+    restart: always
+    environment:
+      - reschedule:on-node-failure
+  payment:
+    image: arijmansour/pfe_payement_microservice
+    hostname: pfe_payement_microservice
+    restart: always
+    environment:
+      - reschedule:on-node-failure
+    entrypoint:
+      - /app
+    command:
+      - -port=80
+      - -decline=999
+  user:
+    image: arijmansour/pfe_user_microservice
+    hostname: pfe_user_microservice
+    restart: always
+    environment:
+      - MONGO_HOST=user-db:27017
+      - reschedule=on-node-failure
+  user-db:
+    image: arijmansour/pfe_user-db_microservice
+    hostname: pfe_user-db_microservice
+    restart: always
+    environment:
+      - reschedule=on-node-failure
