@@ -2,6 +2,8 @@ version: '2'
 
 services:
   Front-end:
+    build:
+     context: .
     image: arijmansour/pfe_front_microservice
     ports:
       - '8080:8080'

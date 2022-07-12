@@ -1,4 +1,4 @@
-IMAGE=front-end
+IMAGE=arijfront
 DOCKER_IFLAG := $(if $(GITHUB_ACTIONS),"-i","-it")
 
 .PHONY: test coverage
@@ -29,7 +29,7 @@ server:
 		-v $$PWD:/usr/src/app   \
 		-P                      \
 		-e NODE_ENV=development \
-		-e PORT=8080            \
+		-e PORT=8080           \
 		-p 8080:8080            \
 		--network test_default  \
 		$(IMAGE) /usr/local/bin/npm start
